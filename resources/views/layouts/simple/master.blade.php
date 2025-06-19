@@ -3,31 +3,22 @@
 
 <head>
     @include('layouts.simple.head')
-    @include('layouts.simple.css')
 </head>
 
-<body class="dark-only">
+<body class="g-sidenav-show  bg-gray-100">
+    @include('layouts.simple.sidebar')
 
-    <!-- tap on top starts-->
-    <div class="tap-top"><i data-feather="chevrons-up"></i></div>
-    <!-- tap on tap ends-->
-
-    <!-- page-wrapper Start-->
-    <div class="page-wrapper compact-wrapper" id="pageWrapper">
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         @include('layouts.simple.header')
-        <!-- Page Body Start-->
-        <div class="page-body-wrapper">
-            @include('layouts.simple.sidebar')
 
-            <div class="page-body">
-                @yield('main_content')
-            </div>
+        <div class="container-fluid py-4">
+            @yield('main_content')
 
             @include('layouts.simple.footer')
         </div>
-    </div>
+    </main>
     @include('layouts.simple.scripts')
-    @include('admin.inc.alerts')
+
 </body>
 
 </html>

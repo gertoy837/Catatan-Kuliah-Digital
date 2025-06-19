@@ -1,48 +1,69 @@
-<!-- Page Header Start-->
-<div class="page-header">
-    <div class="header-wrapper row m-0">
-        <div class="header-logo-wrapper col-auto p-0">
-            <div class="logo-wrapper"><a href="{{ route('dashboard') }}">Study</a></div>
-            <div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
-            </div>
-        </div>
-        <div class="nav-right col-xxl-7 col-xl-6 col-md-7 col-8 pull-right right-header p-0 ms-auto">
-            <ul class="nav-menus">
-                <li class="fullscreen-body"> <span><svg id="maximize-screen">
-                            <use href="{{ asset('assets/svg/icon-sprite.svg#full-screen') }}"></use>
-                        </svg></span></li>
-                <li>
-                    <div class="mode"><svg>
-                            <use href="{{ asset('assets/svg/icon-sprite.svg#moon') }}"></use>
-                        </svg></div>
+<!-- Navbar -->
+<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+    navbar-scroll="true">
+    <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Halaman</a>
                 </li>
-                <li class="profile-nav onhover-dropdown pe-0 py-0">
-                    <div class="d-flex profile-media"><img class="b-r-10"
-                            src="{{ asset('assets/images/dashboard/profile.png') }}" alt="">
-                        <div class="flex-grow-1"><span>{{ ucfirst(auth()?->user()?->first_name) }}</span>
-                            <p class="mb-0">{{ auth()?->user()->name }} <i class="middle fa-solid fa-angle-down"></i>
-                            </p>
-                        </div>
-                    </div>
-                    <ul class="profile-dropdown onhover-show-div">
-                        <li><a href="{{ route('profile.edit', auth()->user()->name) }}"><i
-                                    data-feather="user"></i><span>My Profile </span></a></li>
-                        <li><a href="{{ route('dashboard') }}"><i data-feather="mail"></i><span>Inbox</span></a></li>
-                        <li><a href="{{ route('dashboard') }}"><i
-                                    data-feather="file-text"></i><span>Taskboard</span></a>
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">@yield('title')</li>
+            </ol>
+            <h6 class="font-weight-bolder mb-0">@yield('title')</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+            <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                <div class="input-group">
+                    <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                    <input type="text" class="form-control" placeholder="Tulis disini...">
+                </div>
+            </div>
+            <ul class="navbar-nav  justify-content-end">
+                <li class="nav-item dropdown pe-2 d-flex align-items-center">
+                    <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-user me-sm-1"></i>
+                        <span class="d-sm-inline d-none">{{ Auth::user()->name }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end px-2 pt-3" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="dropdown-item border-radius-md" href="{{ route('profile.edit') }}">
+                                <div class="d-flex">
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="text-sm font-weight-normal">
+                                            <span class="font-weight-bold">Profile</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </a>
                         </li>
-                        <li><a href="{{ route('dashboard') }}"><i data-feather="settings"></i><span>Settings</span></a>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <a class="dropdown-item border-radius-md" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); this.closest('form').submit();">
+                                    <div class="d-flex">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="text-sm font-weight-normal">
+                                                <span class="font-weight-bold">Log Out</span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </a>
+                            </form>
                         </li>
-                        <li><a href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                                    data-feather="log-in"> </i><span>Log out</span></a></li>
-                        <form action="{{ route('logout') }}" method="POST" class="d-none" id="logout-form">
-                            @csrf
-                        </form>
                     </ul>
+                </li>
+                <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                    <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                        <div class="sidenav-toggler-inner">
+                            <i class="sidenav-toggler-line"></i>
+                            <i class="sidenav-toggler-line"></i>
+                            <i class="sidenav-toggler-line"></i>
+                        </div>
+                    </a>
                 </li>
             </ul>
         </div>
     </div>
-</div>
-<!-- Page Header Ends -->
+</nav>
+<!-- End Navbar -->
