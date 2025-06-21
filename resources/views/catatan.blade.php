@@ -7,7 +7,7 @@
         <div class="col-lg-6 col-12">
             <div class="card shadow h-100">
                 <div class="card-header pb-0 p-3">
-                    <h6 class="mb-0">Catatan #1</h6>
+                    <h6 class="mb-0">Topik #1</h6>
                 </div>
                 <div class="card-body border m-3 mb-0 border-gray-600 pb-0 p-3 rounded">
                     <p class="text-sm">
@@ -24,7 +24,7 @@
         <div class="col-lg-6 col-12 mt-4 mt-lg-0">
             <div class="card shadow h-100">
                 <div class="card-header pb-0 p-3">
-                    <h6 class="mb-0">Catatan #2</h6>
+                    <h6 class="mb-0">Topik #2</h6>
                 </div>
                 <div class="card-body border m-3 mb-0 border-gray-600 pb-0 p-3">
                     <p class="text-sm">
@@ -43,7 +43,7 @@
         <div class="col-lg-6 col-12">
             <div class="card shadow h-100">
                 <div class="card-header pb-0 p-3">
-                    <h6 class="mb-0">Catatan #3</h6>
+                    <h6 class="mb-0">Catatan #1</h6>
                 </div>
                 <div class="card-body border m-3 mb-0 border-gray-600 pb-0 p-3">
                     <p class="text-sm">
@@ -52,15 +52,22 @@
                         deserunt animi voluptates soluta!
                     </p>
                 </div>
-                <div class="card-footer p-3">
-                    <span class="badge border border-secondary text-secondary bg-white text-lowercase">#lorem</span>
+                <div class="p-3">
+                      <div class="flex">
+                        <span class="badge border border-secondary text-secondary bg-white text-lowercase">#lorem</span>
+                        <span class="badge border border-secondary text-secondary bg-white text-lowercase">#lorem</span>
+                    </div>
                 </div>
+                {{-- <hr class="horizontal dark m-0">
+                <div class="p-3">
+                    <p>wdadaw</p>
+                </div> --}}
             </div>
         </div>
         <div class="col-lg-6 col-12 mt-4 mt-lg-0">
             <div class="card shadow h-100">
                 <div class="card-header pb-0 p-3">
-                    <h6 class="mb-0">Catatan #4</h6>
+                    <h6 class="mb-0">Catatan #2</h6>
                 </div>
                 <div class="card-body border m-3 mb-0 border-gray-600 pb-0 p-3">
                     <p class="text-sm">
@@ -70,7 +77,11 @@
                     </p>
                 </div>
                 <div class="card-footer p-3">
-                    <span class="badge border border-secondary text-secondary bg-white text-lowercase">#lorem</span>
+                    <div class="flex">
+                        <span class="badge border border-secondary text-secondary bg-white text-lowercase">#lorem</span>
+                        <span class="badge border border-secondary text-secondary bg-white text-lowercase">#lorem</span>
+                        <span class="badge border border-secondary text-secondary bg-white text-lowercase">#lorem</span>
+                    </div>
                 </div>
             </div>
         </div>
