@@ -1,6 +1,6 @@
 @extends('layouts.simple.master')
 
-@section('title', 'Catatan')
+@section('title', 'Dashboard')
 
 @section('main_content')
     <div class="row">
@@ -18,6 +18,9 @@
                 </div>
                 <div class="card-footer p-3">
                     <span class="badge border border-secondary text-secondary bg-white text-lowercase">#lorem</span>
+                    @foreach ($note as $nt)
+                        <a href="/catatan/{{$nt->id}}" class="btn btn-primary btn-sm float-end">Detail</a>
+                    @endforeach
                 </div>
             </div>
         </div>
