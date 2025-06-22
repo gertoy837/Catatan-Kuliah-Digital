@@ -8,22 +8,19 @@
         <div class="card shadow">
             <div class="card-header d-flex justify-content-between align-items-center p-3">
                 <h5 class="mb-0">{{ $note->title ?? 'Catatan #' . $note->id }}</h5>
-
-                <!-- Tombol Aksi -->
-                <div>
-                    <a href="{{ route('catatan.create') }}" class="btn btn-success btn-sm me-2">Buat Baru</a>
+                <div class="d-flex">
                     <a href="{{ route('catatan.edit', $note->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
-                    {{-- <a href="{{ route('catatan.delete') }}" class="btn btn-danger btn-sm me-2">Hapus</a> --}}
                 </div>
             </div>
 
             <div class="card-body p-4">
-                
-
-                <!-- Isi Catatan -->
                 <div class="note-content p-3 border rounded bg-light" style="white-space: pre-wrap; line-height: 1.6;">
                     {!! $note->body !!}
                 </div>
+
+                <br>
+                <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-sm me-2">Kembali</a>
+
 
                 <!-- Tag Catatan -->
                 {{-- @if ($note->tags->isNotEmpty())

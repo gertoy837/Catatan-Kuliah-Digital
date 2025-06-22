@@ -15,7 +15,7 @@ class NoteController extends Controller
      */
     public function index(): RedirectResponse
     {
-        return Redirect::route('catatan.index');
+        return Redirect::route('dashboard');
     }
 
     /**
@@ -23,9 +23,7 @@ class NoteController extends Controller
      */
     public function create()
     {
-        return view('note.create-note', [
-            'user' => Auth::user(),
-        ]);
+        return view('note.create');
     }
 
     /**
@@ -38,12 +36,12 @@ class NoteController extends Controller
     ]);
 
     $note = Note::create([
-        // 'title' => 'Catatan Baru', // atau ambil dari input tambahan jika tersedia
-        // 'body' => $request->content,
+        'title' => 'Catatan Baru',
+        'body' => $request->content,
         // 'user_id' => auth()->id(),
     ]);
 
-    return redirect()->route('catatan.edit', $note->id)->with('success', 'Catatan berhasil dibuat!');
+    return redirect()->route('catatan.show', $note->id)->with('success', 'Catatan berhasil dibuat!');
     }
 
     /**
