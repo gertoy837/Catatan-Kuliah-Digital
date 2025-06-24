@@ -184,3 +184,4 @@
     }
 </script>
 <script src="{{ asset('assets') }}/js/soft-ui-dashboard.min.js?v=1.1.0"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js"></script> --}}

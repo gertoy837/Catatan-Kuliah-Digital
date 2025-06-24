@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subject;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -15,33 +17,39 @@ class NoteController extends Controller
      */
     public function index(): RedirectResponse
     {
-        return Redirect::route('dashboard');
+        return Redirect::route('catatan.index');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan form untuk membuat catatan baru di dalam topik tertentu.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('note.create');
+        $topic = Topic::find($request->id);
+        return view('note.create', compact('topic'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Topic $topic)
     {
-        $request->validate([
-        'content' => 'required|string',
-    ]);
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required',
+            'topic_id' => 'required|exists:topics,id',
+        ]);
 
-    $note = Note::create([
-        'title' => 'Catatan Baru',
-        'body' => $request->content,
-        // 'user_id' => auth()->id(),
-    ]);
+        // dd($request);
 
-    return redirect()->route('catatan.show', $note->id)->with('success', 'Catatan berhasil dibuat!');
+        $note = Note::create([
+            'title' => $validated['title'],
+            'body' => $validated['body'],
+            'topic_id' => $validated['topic_id'],
+            'user_id' => auth()->id(),
+        ]);
+
+        return redirect()->route('catatan.show', $note)->with('success', 'Catatan berhasil disimpan.');
     }
 
     /**
@@ -75,5 +83,14 @@ class NoteController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function detail($id, $topic)
+    {
+        $subject = Subject::findOrFail($id);
+        $topic = $subject->topics()->where('id', $topic)->firstOrFail();
+
+        return view('note.detail', compact('subject', 'topic'));
     }
 }

@@ -2,28 +2,35 @@
 
 @section('title', 'Detail Catatan')
 
+@section('head')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js"></script>
+@endsection
+
 @section('main_content')
-<div class="row">
-    <div class="col-12">
-        <div class="card shadow">
-            <div class="card-header d-flex justify-content-between align-items-center p-3">
-                <h5 class="mb-0">{{ $note->title ?? 'Catatan #' . $note->id }}</h5>
-                <div class="d-flex">
-                    <a href="{{ route('catatan.edit', $note->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
-                </div>
-            </div>
-
-            <div class="card-body p-4">
-                <div class="note-content p-3 border rounded bg-light" style="white-space: pre-wrap; line-height: 1.6;">
-                    {!! $note->body !!}
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header d-flex justify-content-between align-items-center p-3">
+                    <h5 class="mb-0">{{ $note->title ?? 'Catatan #' . $note->id }}</h5>
+                    <div class="d-flex">
+                        <a href="{{ route('catatan.edit', $note->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
+                    </div>
                 </div>
 
-                <br>
-                <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-sm me-2">Kembali</a>
+                <div class="card-body p-4">
+                    <div class="note-content p-3 border rounded bg-light" style="margin: 0; padding: 0;">
+                        {!! $note->body !!}
+                    </div>
+
+                    <br>
+                    <a href="{{ route('subjects.show', $note->topic->subject) }}" class="btn btn-secondary btn-sm">
+                        <i class="fa fa-arrow-left"></i> Kembali ke Daftar Catatan
+                    </a>
 
 
-                <!-- Tag Catatan -->
-                {{-- @if ($note->tags->isNotEmpty())
+                    <!-- Tag Catatan -->
+                    {{-- @if ($note->tags->isNotEmpty())
                     <div class="mt-4">
                         @foreach ($note->tags as $tag)
                             <span class="badge border border-secondary text-secondary bg-white">#{{ $tag->name }}</span>
@@ -32,13 +39,13 @@
                 @else
                     <p class="text-muted mt-4"><em>Tidak ada tag.</em></p>
                 @endif --}}
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal Konfirmasi Hapus -->
-{{-- <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <!-- Modal Konfirmasi Hapus -->
+    {{-- <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

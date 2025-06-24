@@ -21,6 +21,10 @@ class Note extends Model
         'shareable_token'
     ];
 
+    protected $richTextAttributes = [
+        'body',
+    ];
+
     /**
      * Relasi: Sebuah Note dibuat oleh seorang User.
      */

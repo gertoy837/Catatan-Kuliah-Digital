@@ -8,6 +8,9 @@
 {{-- <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-icons.css" rel="stylesheet" />
 <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-svg.css" rel="stylesheet" /> --}}
 <!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css">
 <script src="https://kit.fontawesome.com/e2bb076cb4.js" crossorigin="anonymous"></script>
 <!-- CSS Files -->
 <link id="pagestyle" href="{{ asset('assets') }}/css/soft-ui-dashboard.css?v=1.1.0" rel="stylesheet" />
+<x-rich-text::styles theme="richtextlaravel" data-turbo-track="false" />
+@yield('head')

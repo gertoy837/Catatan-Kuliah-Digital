@@ -1,67 +1,65 @@
 @extends('layouts.simple.master')
 
-@section('title', 'Catatan Baru')
+@section('breadcrumb')
+<li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="{{route('dashboard')}}">Dashboard Mata Kuliah</a></li>
+<li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="{{route('subjects.show', $topic->subject)}}">Detail Mata Kuliah</a></li>
+@endsection
+@section('title', 'Buat Catatan Baru')
+
+@section('head')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js"></script>
+@endsection
 
 @section('main_content')
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow">
-                <div class="card-header pb-0 p-3">
-                    <h5 class="mb-0">Buat Catatan Baru</h5>
-                </div>
-                <div class="card-body p-4">
-
-                    <!-- Toolbar Formatting -->
-                    <div class="btn-toolbar mb-3" role="toolbar">
-                        <div class="btn-group me-2" role="group">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="formatText('bold')"
-                                title="Bold">
-                                <i class="bi bi-type-bold"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="formatText('italic')"
-                                title="Italic">
-                                <i class="bi bi-type-italic"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm"
-                                onclick="formatText('underline')" title="Underline">
-                                <i class="bi bi-type-underline"></i>
-                            </button>
-                        </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Buat Catatan Baru</h4>
+                        <span>Buat catatan baru di dalam topik: <strong>{{ $topic->name }}</strong> (Mata Kuliah:
+                            {{ $topic->subject->name }})</span>
                     </div>
+                    <div class="card-body">
+                        {{-- Form tidak lagi memerlukan enctype="multipart/form-data" --}}
+                        <form action="{{ route('catatan.store', $topic) }}" method="POST" class="theme-form">
+                            @csrf
+                            <input type="hidden" name="topic_id" value="{{ $topic->id }}">
 
-                    <!-- Area Editable -->
-                    <div id="editor" class="form-control p-3" contenteditable="true"
-                        style="min-height: 400px; white-space: pre-wrap; line-height: 1.6;">
-                        Tuliskan catatanmu di sini...
+                            {{-- Input untuk Judul Catatan --}}
+                            <div class="mb-3">
+                                <label class="col-form-label pt-0" for="title">Judul Catatan</label>
+                                <input class="form-control @error('title') is-invalid @enderror" id="title"
+                                    type="text" name="title" placeholder="Masukkan judul catatan"
+                                    value="{{ old('title') }}">
+                                @error('title')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="col-form-label pt-0" for="body">Isi Catatan dan Lampiran</label>
+
+                                <input id="body" type="hidden" name="body"
+                                    value="{{ old('body', $note->body ?? '') }}">
+                                <trix-editor input="body"></trix-editor>
+
+                                @error('body')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Tombol Aksi --}}
+                            <hr>
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{{ route('catatan.detail', [$topic->subject_id, $topic->id]) }}" class="btn btn-secondary">Batal</a>
+                                <button class="btn btn-primary" type="submit">Simpan Catatan</button>
+                            </div>
+                        </form>
                     </div>
-
-                    <!-- Tombol Simpan -->
-                    <div class="mt-4 text-end">
-                        <button class="btn btn-primary px-4" onclick="saveNote()">Simpan</button>
-                    </div>
-
-                    <!-- Form Hidden untuk Kirim Data ke Backend -->
-                    <form id="noteForm" action="{{ route('catatan.store') }}" method="POST" style="display:none;">
-                        @csrf
-                        <input type="hidden" name="content" id="noteContent">
-                    </form>
-
                 </div>
             </div>
         </div>
     </div>
-@endsection
-
-@section('scripts')
-    <script>
-        function formatText(command) {
-            document.execCommand(command, false, null);
-        }
-
-        function saveNote() {
-            const content = document.getElementById('editor').innerHTML;
-            document.getElementById('noteContent').value = content;
-            document.getElementById('noteForm').submit();
-        }
-    </script>
 @endsection

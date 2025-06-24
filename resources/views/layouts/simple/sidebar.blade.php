@@ -16,7 +16,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Dashbor</h6>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Request::is('catatan') ? 'active' : '' }}" href="{{route('dashboard')}}">
+                <a class="nav-link active" href="{{route('dashboard')}}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 40 44" version="1.1"
@@ -38,11 +38,11 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Catatan</span>
+                    <span class="nav-link-text ms-1">Mata Kuliah</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Request::is('ruang_kerja') ? 'active' : '' }}" href="{{route('workspace')}}">
+                <a class="nav-link" href="{{route('workspace')}}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1"
