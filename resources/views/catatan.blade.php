@@ -4,27 +4,29 @@
 
 @section('main_content')
     <div class="row">
-        <div class="col-lg-6 col-12">
-            <div class="card shadow h-100">
-                <div class="card-header pb-0 p-3">
-                    <h6 class="mb-0">Topik #1</h6>
-                </div>
-                <div class="card-body border m-3 mb-0 border-gray-600 pb-0 p-3 rounded">
-                    <p class="text-sm">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore consequuntur esse repellat qui
-                        nesciunt quas, soluta dignissimos aperiam omnis sunt sit recusandae. Dolor, omnis doloribus dicta
-                        deserunt animi voluptates soluta!
-                    </p>
-                </div>
-                <div class="card-footer p-3">
-                    <span class="badge border border-secondary text-secondary bg-white text-lowercase">#lorem</span>
-                    @foreach ($note as $nt)
-                        <a href="/catatan/{{$nt->id}}" class="btn btn-primary btn-sm float-end">Detail</a>
-                    @endforeach
+        <div class="col-lg-12 justify-content-between align-items-center mb-3">
+            <a href="{{ route('catatan.create') }}" class="btn btn-success btn-sm me-2 float-end">Buat Catatan Baru</a>
+        </div>
+
+        @foreach ($note as $nt)
+            <div class="col-lg-6 col-12">
+                <div class="card shadow h-100">
+                    <div class="card-header pb-0 p-3">
+                        <h6 class="mb-0">{{ $nt->title }}</h6>
+                    </div>
+                    <div class="card-body border m-3 mb-0 border-gray-600 pb-0 p-3 rounded">
+                        <p class="text-sm">
+                            {{$nt->body}}
+                        </p>
+                    </div>
+                    <div class="card-footer p-3">
+                        <span class="badge border border-secondary text-secondary bg-white text-lowercase">#lorem</span>
+                        <a href="/catatan/{{ $nt->id }}" class="btn btn-primary btn-sm float-end">Detail</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-6 col-12 mt-4 mt-lg-0">
+        @endforeach
+        {{-- <div class="col-lg-6 col-12 mt-4 mt-lg-0">
             <div class="card shadow h-100">
                 <div class="card-header pb-0 p-3">
                     <h6 class="mb-0">Topik #2</h6>
@@ -87,7 +89,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 @endsection
 

@@ -41,7 +41,7 @@
                     </div>
 
                     <!-- Form Hidden untuk Kirim Data ke Backend -->
-                    <form id="noteForm" action="{{ route('catatan.create') }}" method="POST" style="display:none;">
+                    <form id="noteForm" action="{{ route('catatan.store') }}" method="POST" style="display:none;">
                         @csrf
                         <input type="hidden" name="content" id="noteContent">
                     </form>
