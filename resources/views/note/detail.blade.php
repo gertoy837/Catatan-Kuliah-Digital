@@ -29,7 +29,9 @@
                             Baru</a>
                     </div>
                 </div>
-                <div class="card-body">
+            </div>
+            <div class="card">
+                <div class="card-body shadow">
                     <ul class="list-group list-group-flush">
                         @forelse ($topic->notes as $note)
                             <li class="list-group-item d-flex justify-content-between align-items-center">

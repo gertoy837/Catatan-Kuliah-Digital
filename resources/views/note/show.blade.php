@@ -16,7 +16,7 @@
                                 <a href="{{ route('catatan.edit', $note) }}" class="btn btn-warning btn-sm">
                                     <i class="fa fa-pencil"></i> Edit Catatan
                                 </a>
-                                <a href="{{ route('subjects.show', $note->topic->subject) }}"
+                                <a href="{{ route('catatan.detail', [$note->topic->subject_id, $note->topic_id]) }}"
                                     class="btn btn-secondary btn-sm">
                                     <i class="fa fa-arrow-left"></i> Kembali ke Daftar
                                 </a>
@@ -27,17 +27,65 @@
                     </div>
 
                     @if ($note->lampiran)
-                        <div class="m-1 p-4">
-                            <a href="{{ asset('uploads/' . $note->lampiran) }}" class="flex" target="_blank">
-                                {{ $note->lampiran }}
-                            </a>
+                        @php
+                            $filePath = public_path('uploads/' . $note->lampiran);
+                            $extension = strtolower(pathinfo($note->lampiran, PATHINFO_EXTENSION));
+                            $publicUrl = asset('uploads/' . $note->lampiran);
+                        @endphp
+
+                        <div class="lampiran-container mt-4 p-3 border rounded">
+                            <h6 class="mb-3">Lampiran:</h6>
+
+                            {{-- 1. Jika file adalah GAMBAR --}}
+                            @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp']))
+                                <a href="{{ $publicUrl }}" target="_blank" title="Lihat gambar penuh">
+                                    <img src="{{ $publicUrl }}" alt="Lampiran Gambar"
+                                        style="max-width: 400px; height: auto; border-radius: 8px;">
+                                </a>
+
+                                {{-- 2. Jika file adalah PDF --}}
+                            @elseif ($extension == 'pdf')
+                                <iframe src="{{ $publicUrl }}" width="100%" height="500px"
+                                    style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+
+                                {{-- 3. Jika file adalah VIDEO --}}
+                            @elseif (in_array($extension, ['mp4', 'webm', 'ogg']))
+                                <video width="100%" style="max-width: 500px;" controls>
+                                    <source src="{{ $publicUrl }}" type="video/{{ $extension }}">
+                                    Browser Anda tidak mendukung tag video.
+                                </video>
+
+                                {{-- 4. Jika file adalah AUDIO --}}
+                            @elseif (in_array($extension, ['mp3', 'wav', 'ogg']))
+                                <audio controls>
+                                    <source src="{{ $publicUrl }}" type="audio/{{ $extension }}">
+                                    Browser Anda tidak mendukung tag audio.
+                                </audio>
+
+                                {{-- 5. Default untuk file lainnya (Dokumen, Zip, dll) --}}
+                            @else
+                                <div class="flex items-center p-2 bg-gray-100 rounded-lg">
+                                    {{-- Anda bisa menggunakan library ikon seperti Font Awesome untuk ini --}}
+                                    {{-- <i class="fa fa-file-alt mr-2"></i> --}}
+                                    <svg class="w-6 h-6 mr-2 text-gray-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                        </path>
+                                    </svg>
+
+                                    <a href="{{ $publicUrl }}" target="_blank" download
+                                        class="text-blue-600 hover:underline">
+                                        Download: {{ $note->lampiran }}
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     @endif
-                    <div class="note-content p-1 m-3 border rounded bg-light" style="margin: 0; padding: 0;">
+
+                    <div class="note-content rounded" style="margin: 0; padding: 0;">
                         <div class="card-body">
-                            {{-- Merender konten dari Trix Editor --}}
-                            {{-- Paket tonysm/rich-text-laravel akan otomatis merender HTML dan lampiran --}}
-                            <div class="trix-content ">
+                            <div class="trix-content bg-white text-black">
                                 {!! $note->body !!}
                             </div>
                         </div>

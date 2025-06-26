@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->string('title');
             $table->longText('body');
-            // $table->string('file_path')->nullable();
+            $table->string('lampiran')->nullable();
             $table->string('shareable_token', 40)->unique()->nullable();
             $table->timestamps();
         });
