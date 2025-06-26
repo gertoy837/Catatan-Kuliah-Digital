@@ -21,6 +21,6 @@ class DashboardController extends Controller
                         ->paginate(9); // Misal, 9 kartu per halaman (3x3 grid)
 
         // 5. Kirim data 'subjects' ke view 'subjects.index'.
-        return view('catatan', compact('subjects'));
+        return view('dashboard', compact('subjects'));
     }
 }

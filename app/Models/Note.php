@@ -13,10 +13,11 @@ class Note extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 
-        'body', 
-        'user_id', 
-        'topic_id', 
+        'title',
+        'body',
+        'user_id',
+        'lampiran',
+        'topic_id',
         'workspace_id',
         'shareable_token'
     ];
@@ -48,7 +49,7 @@ class Note extends Model
     {
         return $this->belongsTo(Workspace::class);
     }
-    
+
     /**
      * Relasi: Sebuah Note memiliki banyak Tags.
      */
