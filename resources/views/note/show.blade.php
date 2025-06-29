@@ -90,6 +90,17 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="mt-4">
+                        <strong>Tags:</strong>
+                        @forelse($note->tags as $tag)
+                            <a href="{{ route('catatan.tag', $tag->name) }}" class="badge bg-primary text-decoration-none ms-1">
+                                #{{ $tag->name }}
+                            </a>
+                        @empty
+                            <em class="text-muted ms-1">Tidak ada tag.</em>
+                        @endforelse
+                    </div>
                 </div>
 
                 {{-- Placeholder untuk Fitur Komentar di Masa Depan --}}

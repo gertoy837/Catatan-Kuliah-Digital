@@ -15,10 +15,20 @@ class NoteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    // public function index(): RedirectResponse
-    // {
-    //     return Redirect::route('catatan.index');
-    // }
+    public function index(\App\Models\Tag $tag = null)
+    {
+        $query = Note::latest();
+
+        if ($tag) {
+            $query->whereHas('tags', function ($q) use ($tag) {
+                $q->where('tags.id', $tag->id);
+            });
+        }
+
+        $notes = $query->with('tags')->paginate(10);
+
+        return view('note.index', compact('notes', 'tag'));
+    }
 
     /**
      * Menampilkan form untuk membuat catatan baru di dalam topik tertentu.
@@ -32,25 +42,25 @@ class NoteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Topic $topic)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required',
             'topic_id' => 'required|exists:topics,id',
             'lampiran' => 'nullable|file|mimes:pdf,doc,docx,txt,jpg,jpeg,png|max:10240',
+            'tags' => 'nullable|string'
         ]);
 
+        $lampiranPath = null;
         if ($request->hasFile('lampiran') && $request->file('lampiran')->isValid()) {
-            $lampiranPath = null;
-            if ($request->hasFile('lampiran')) {
-                $lampiran = $request->file('lampiran');
-                $fileName = time() . '_' . $lampiran->getClientOriginalName();
-                $lampiran->move(public_path('uploads'), $fileName);
-                $lampiranPath = $fileName;
-            }
+            $lampiran = $request->file('lampiran');
+            $fileName = time() . '_' . $lampiran->getClientOriginalName();
+            $lampiran->move(public_path('uploads'), $fileName);
+            $lampiranPath = $fileName;
         }
 
+        // Panggil Note::create() HANYA SATU KALI
         $note = Note::create([
             'title' => $validated['title'],
             'body' => $validated['body'],
@@ -59,7 +69,19 @@ class NoteController extends Controller
             'lampiran' => $lampiranPath,
         ]);
 
-        return redirect()->route('catatan.show', $note)->with('success', 'Catatan berhasil disimpan.');
+        // Proses Tags setelah catatan berhasil dibuat
+        if (!empty($validated['tags'])) {
+            $tagNames = array_filter(array_map('trim', explode(',', $validated['tags'])));
+            $tagIds = [];
+            foreach ($tagNames as $tagName) {
+                $tag = \App\Models\Tag::firstOrCreate(['name' => strtolower($tagName)]);
+                $tagIds[] = $tag->id;
+            }
+            $note->tags()->sync($tagIds);
+        }
+
+        // Redirect ke halaman detail (show) dari catatan yang BARU dibuat
+        return redirect()->route('catatan.show', $note->id)->with('success', 'Catatan berhasil disimpan.');
     }
 
     /**
@@ -92,6 +114,7 @@ class NoteController extends Controller
             'body' => 'required',
             'topic_id' => 'required|exists:topics,id',
             'lampiran' => 'nullable|file|mimes:pdf,doc,docx,txt,jpg,jpeg,png|max:10240',
+            'tags' => 'nullable|string',
         ]);
 
         $note->title = $validated['title'];
@@ -112,6 +135,16 @@ class NoteController extends Controller
         }
 
         $note->save();
+
+        $tagIds = [];
+        if (!empty($validated['tags'])) {
+            $tagNames = array_filter(array_map('trim', explode(',', $validated['tags'])));
+            foreach ($tagNames as $tagName) {
+                $tag = \App\Models\Tag::firstOrCreate(['name' => strtolower($tagName)]);
+                $tagIds[] = $tag->id;
+            }
+        }
+        $note->tags()->sync($tagIds);
 
         return redirect()->route('catatan.show', $note)->with('success', 'Catatan berhasil diperbarui.');
     }

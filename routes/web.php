@@ -6,6 +6,7 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -14,6 +15,7 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/catatan', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/catatan/tags/{tag:name}', [NoteController::class, 'index'])->name('catatan.tag');
     Route::get('/catatan/create/{id}', [NoteController::class, 'create'])->name('catatan.create');
     Route::post('/catatan/store', [NoteController::class, 'store'])->name('catatan.store');
     Route::get('/catatan/show/{id}', [NoteController::class, 'show'])->name('catatan.show');

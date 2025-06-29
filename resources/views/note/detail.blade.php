@@ -41,6 +41,15 @@
                                     <br>
                                     <small class="text-muted">Diperbarui:
                                         {{ $note->updated_at->format('d M Y, H:i') }}</small>
+                                    <div class="tags-container mt-2">
+                                            @forelse($note->tags as $tag)
+                                                <a href="{{ route('catatan.tag', $tag->name) }}" class="badge bg-info text-decoration-none">
+                                                    #{{ $tag->name }}
+                                                </a>
+                                            @empty
+                                                {{-- Tidak perlu menampilkan apa-apa jika tidak ada tag --}}
+                                            @endforelse
+                                    </div>
                                 </div>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('catatan.show', $note) }}" class="btn btn-info btn-xs">Lihat</a>

@@ -61,6 +61,17 @@
                                 @enderror
                             </div>
 
+                            {{-- Input Tags --}}
+                            <div class="mb-3">
+                                <label class="col-form-label pt-0" for="tags">Tags (Pisahkan dengan koma)</label>
+                                <input class="form-control @error('tags') is-invalid @enderror" id="tags"
+                                    type="text" name="tags" placeholder="Contoh: penting, rumus, ujian"
+                                    value="{{ old('tags') }}">
+                                @error('tags')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
                             {{-- Tombol Aksi --}}
                             <hr>
                             <div class="d-flex justify-content-end gap-2">
