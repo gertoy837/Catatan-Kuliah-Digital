@@ -7,6 +7,8 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -29,6 +31,9 @@ Route::middleware('auth')->group(function () {
     
     Route::post('/subjects/{subject}/topics', [TopicController::class, 'store'])->name('topics.store');
     Route::delete('/subjects/{subject}/topics/{topic}', [TopicController::class, 'destroy'])->name('topics.destroy');
+
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
 
     // // ==========================================================
     // // ROUTE UNTUK NOTES (CATATAN)

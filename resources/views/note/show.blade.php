@@ -104,13 +104,37 @@
                 </div>
 
                 {{-- Placeholder untuk Fitur Komentar di Masa Depan --}}
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h5>Komentar</h5>
-                    </div>
-                    <div class="card-body">
-                        {{-- Anda bisa menambahkan logika untuk menampilkan dan menambah komentar di sini --}}
-                        <p class="text-muted">Fitur komentar akan tersedia di sini.</p>
+                <div class="container-fluid p-3">
+                    <div class="row">
+                        <!-- Sidebar komentar -->
+                        <div class="col-md-4">
+                            <div class="card bg-light text-white p-3" style="max-height: 90vh; overflow-y: auto;">
+                                <h5>Komentar</h5>
+                                
+                                <!-- Form Tambah Komentar -->
+                                <form method="POST" action="{{ route('comments.store') }}">
+                                    @csrf
+                                    <input type="hidden" name="note_id" value="{{ $note->id }}">
+                                    <input type="text" name="body" class="form-control mb-2" placeholder="+ Tambahkan komentar">
+                                    <button type="submit" class="btn btn-outline-primary w-50 justify-center">Kirim</button>
+                                </form>
+
+                                <!-- Daftar Komentar -->
+                                <div id="commentList" class="mt-3">
+                                    @forelse($note->comments as $comment)
+                                        <div class="card bg-secondary text-white mb-2 p-2">
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ $comment->user->avatar_url ?? 'https://via.placeholder.com/40' }}" class="rounded-circle me-2" width="32" height="32">
+                                                <strong>{{ $comment->user->name }}</strong>
+                                            </div>
+                                            <p class="mt-2 mb-1">{{ $comment->body }}</p>
+                                        </div>
+                                    @empty
+                                        <p class="text-muted">Belum ada komentar.</p>
+                                    @endforelse
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

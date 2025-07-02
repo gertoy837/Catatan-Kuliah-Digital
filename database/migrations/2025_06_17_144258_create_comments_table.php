@@ -10,11 +10,9 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('body');
-            
-            // Kolom untuk relasi polimorfik
-            $table->morphs('commentable'); // Akan membuat commentable_id (BIGINT) dan commentable_type (VARCHAR)
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->morphs('commentable');
 
             $table->timestamps();
         });
