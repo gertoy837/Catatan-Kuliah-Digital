@@ -13,7 +13,6 @@ class TopicController extends Controller
      */
     public function store(Request $request, Subject $subject)
     {
-        // --- Validasi langsung di dalam controller ---
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
         ]);

@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subject;
+use App\Models\Tag;
 use App\Models\Topic;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use App\Models\Note;
 
 class NoteController extends Controller
@@ -15,9 +13,9 @@ class NoteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(\App\Models\Tag $tag = null)
+    public function index(Tag $tag = null)
     {
-        $query = Note::latest();
+        $query = Note::where('user_id', auth()->id())->latest();
 
         if ($tag) {
             $query->whereHas('tags', function ($q) use ($tag) {
@@ -60,7 +58,6 @@ class NoteController extends Controller
             $lampiranPath = $fileName;
         }
 
-        // Panggil Note::create() HANYA SATU KALI
         $note = Note::create([
             'title' => $validated['title'],
             'body' => $validated['body'],
@@ -69,18 +66,16 @@ class NoteController extends Controller
             'lampiran' => $lampiranPath,
         ]);
 
-        // Proses Tags setelah catatan berhasil dibuat
         if (!empty($validated['tags'])) {
             $tagNames = array_filter(array_map('trim', explode(',', $validated['tags'])));
             $tagIds = [];
             foreach ($tagNames as $tagName) {
-                $tag = \App\Models\Tag::firstOrCreate(['name' => strtolower($tagName)]);
+                $tag = Tag::firstOrCreate(['name' => strtolower($tagName)]);
                 $tagIds[] = $tag->id;
             }
             $note->tags()->sync($tagIds);
         }
 
-        // Redirect ke halaman detail (show) dari catatan yang BARU dibuat
         return redirect()->route('catatan.show', $note->id)->with('success', 'Catatan berhasil disimpan.');
     }
 
@@ -122,12 +117,10 @@ class NoteController extends Controller
         $note->topic_id = $validated['topic_id'];
 
         if ($request->hasFile('lampiran')) {
-            // Hapus lampiran lama jika ada
             if ($note->lampiran && file_exists(public_path('uploads/' . $note->lampiran))) {
                 unlink(public_path('uploads/' . $note->lampiran));
             }
 
-            // Simpan lampiran baru
             $lampiran = $request->file('lampiran');
             $fileName = time() . '_' . $lampiran->getClientOriginalName();
             $lampiran->move(public_path('uploads'), $fileName);
@@ -140,7 +133,7 @@ class NoteController extends Controller
         if (!empty($validated['tags'])) {
             $tagNames = array_filter(array_map('trim', explode(',', $validated['tags'])));
             foreach ($tagNames as $tagName) {
-                $tag = \App\Models\Tag::firstOrCreate(['name' => strtolower($tagName)]);
+                $tag = Tag::firstOrCreate(['name' => strtolower($tagName)]);
                 $tagIds[] = $tag->id;
             }
         }
@@ -158,21 +151,39 @@ class NoteController extends Controller
         $topic = $note->topic;
         $subject = $topic->subject;
 
-        // if ($note->attachment && Storage::exists($note->attachment)) {
-        //     Storage::delete($note->attachment);
-        // }
-
         $note->delete();
 
         return redirect()->route('catatan.detail', [$subject->id, $topic->id])
             ->with('success', 'Catatan berhasil dihapus.');
     }
 
-    public function detail($id, $topic)
+    public function detail(Request $request, $subject_id, $topic_id)
     {
-        $subject = Subject::findOrFail($id);
-        $topic = $subject->topics()->where('id', $topic)->firstOrFail();
+        $subject = Subject::findOrFail($subject_id);
+        $topic = $subject->topics()->findOrFail($topic_id);
+        $activeTag = null;
 
-        return view('note.detail', compact('subject', 'topic'));
+        $notesQuery = $topic->notes();
+
+        if ($request->has('tag') && $request->input('tag') != '') {
+            $tagName = $request->input('tag');
+            $activeTag = Tag::where('name', $tagName)->first();
+
+            if ($activeTag) {
+                $notesQuery->whereHas('tags', function ($query) use ($tagName) {
+                    $query->where('name', 'LIKE', $tagName);
+                });
+            }
+        }
+
+        if ($request->has('search') && $request->input('search') != '') {
+            $searchTerm = $request->input('search');
+            $notesQuery->where('title', 'LIKE', "%{$searchTerm}%");
+        }
+
+        $notes = $notesQuery->with('tags')->latest()->paginate(5)->withQueryString();
+
+        return view('note.detail', compact('subject', 'topic', 'notes', 'activeTag'));
     }
+
 }

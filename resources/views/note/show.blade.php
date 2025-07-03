@@ -7,9 +7,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header">
-
-                        {{-- Judul Catatan dan Tombol Aksi --}}
+                    <div class="card-header pb-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">{{ $note->title }}</h4>
                             <div class="d-flex gap-2">
@@ -24,6 +22,20 @@
                         </div>
                         <small class="text-muted">Dibuat oleh: {{ $note->user->name }} | Terakhir diperbarui:
                             {{ $note->updated_at->diffForHumans() }}</small>
+                        <br>
+                        @foreach ($note->tags as $tag)
+                            <a href="{{ route('catatan.tag', $tag->name) }}" class="text-muted text-decoration-none">
+                                <small>#{{ $tag->name }}</small>
+                            </a>
+                        @endforeach
+                    </div>
+
+                    <div class="note-content rounded" style="margin: 0; padding: 0;">
+                        <div class="card-body">
+                            <div class="trix-content bg-white text-black">
+                                {!! $note->body !!}
+                            </div>
+                        </div>
                     </div>
 
                     @if ($note->lampiran)
@@ -33,40 +45,28 @@
                             $publicUrl = asset('uploads/' . $note->lampiran);
                         @endphp
 
-                        <div class="lampiran-container mt-4 p-3 border rounded">
+                        <div class="lampiran-container px-4">
                             <h6 class="mb-3">Lampiran:</h6>
-
-                            {{-- 1. Jika file adalah GAMBAR --}}
                             @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp']))
                                 <a href="{{ $publicUrl }}" target="_blank" title="Lihat gambar penuh">
                                     <img src="{{ $publicUrl }}" alt="Lampiran Gambar"
                                         style="max-width: 400px; height: auto; border-radius: 8px;">
                                 </a>
-
-                                {{-- 2. Jika file adalah PDF --}}
                             @elseif ($extension == 'pdf')
                                 <iframe src="{{ $publicUrl }}" width="100%" height="500px"
                                     style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
-
-                                {{-- 3. Jika file adalah VIDEO --}}
                             @elseif (in_array($extension, ['mp4', 'webm', 'ogg']))
                                 <video width="100%" style="max-width: 500px;" controls>
                                     <source src="{{ $publicUrl }}" type="video/{{ $extension }}">
                                     Browser Anda tidak mendukung tag video.
                                 </video>
-
-                                {{-- 4. Jika file adalah AUDIO --}}
                             @elseif (in_array($extension, ['mp3', 'wav', 'ogg']))
                                 <audio controls>
                                     <source src="{{ $publicUrl }}" type="audio/{{ $extension }}">
                                     Browser Anda tidak mendukung tag audio.
                                 </audio>
-
-                                {{-- 5. Default untuk file lainnya (Dokumen, Zip, dll) --}}
                             @else
                                 <div class="flex items-center p-2 bg-gray-100 rounded-lg">
-                                    {{-- Anda bisa menggunakan library ikon seperti Font Awesome untuk ini --}}
-                                    {{-- <i class="fa fa-file-alt mr-2"></i> --}}
                                     <svg class="w-6 h-6 mr-2 text-gray-600" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -83,56 +83,56 @@
                         </div>
                     @endif
 
-                    <div class="note-content rounded" style="margin: 0; padding: 0;">
-                        <div class="card-body">
-                            <div class="trix-content bg-white text-black">
-                                {!! $note->body !!}
-                            </div>
-                        </div>
-                    </div>
+                    <div class="p-4">
+                        <form action="{{ route('comments.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="note_id" value="{{ $note->id }}">
+                            <div class="d-flex align-items-start gap-3">
+                                <img src="{{ auth()->user()->avatar_url ?? asset('img/avatar.png') }}"
+                                    class="rounded-circle" width="40" height="40" alt="Avatar">
 
-                    <div class="mt-4">
-                        <strong>Tags:</strong>
-                        @forelse($note->tags as $tag)
-                            <a href="{{ route('catatan.tag', $tag->name) }}" class="badge bg-primary text-decoration-none ms-1">
-                                #{{ $tag->name }}
-                            </a>
-                        @empty
-                            <em class="text-muted ms-1">Tidak ada tag.</em>
-                        @endforelse
+                                <div class="flex-grow-1">
+                                    <textarea name="body" class="form-control" rows="2" placeholder="Tulis komentar Anda..." required></textarea>
+                                    <div class="d-flex justify-content-end mt-2">
+                                        <button type="submit" class="btn btn-primary">Kirim</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
-                {{-- Placeholder untuk Fitur Komentar di Masa Depan --}}
-                <div class="container-fluid p-3">
-                    <div class="row">
-                        <!-- Sidebar komentar -->
-                        <div class="col-md-4">
-                            <div class="card bg-light text-white p-3" style="max-height: 90vh; overflow-y: auto;">
-                                <h5>Komentar</h5>
-                                
-                                <!-- Form Tambah Komentar -->
-                                <form method="POST" action="{{ route('comments.store') }}">
-                                    @csrf
-                                    <input type="hidden" name="note_id" value="{{ $note->id }}">
-                                    <input type="text" name="body" class="form-control mb-2" placeholder="+ Tambahkan komentar">
-                                    <button type="submit" class="btn btn-outline-primary w-50 justify-center">Kirim</button>
-                                </form>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card bg-white text-white p-4" style="max-height: 90vh; overflow-y: auto;">
+                            <h5 class="mb-4">Komentar</h5>
 
-                                <!-- Daftar Komentar -->
-                                <div id="commentList" class="mt-3">
-                                    @forelse($note->comments as $comment)
-                                        <div class="card bg-secondary text-white mb-2 p-2">
-                                            <div class="d-flex align-items-center">
-                                                <img src="{{ $comment->user->avatar_url ?? 'https://via.placeholder.com/40' }}" class="rounded-circle me-2" width="32" height="32">
-                                                <strong>{{ $comment->user->name }}</strong>
+                            <div id="commentList">
+                                @forelse($note->comments as $comment)
+                                    @if (!$loop->first)
+                                        <hr class="my-3">
+                                    @endif
+
+                                    <div class="d-flex align-items-start gap-3">
+                                        <img src="{{ $comment->user->avatar_url ?? asset('img/avatar.png') }}"
+                                            class="rounded-circle" width="40" height="40"
+                                            alt="Avatar {{ $comment->user->name }}">
+
+                                        <div class="flex-grow-1 text-dark">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <strong class="mb-0">{{ $comment->user->name }}</strong>
+                                                <small
+                                                    class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
                                             </div>
-                                            <p class="mt-2 mb-1">{{ $comment->body }}</p>
+
+                                            <p class="mt-1 mb-2">{{ $comment->body }}</p>
                                         </div>
-                                    @empty
-                                        <p class="text-muted">Belum ada komentar.</p>
-                                    @endforelse
-                                </div>
+                                    </div>
+                                @empty
+                                    <div class="text-center p-4 rounded bg-light">
+                                        <p class="text-muted mb-0">Jadilah yang pertama berkomentar!</p>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>

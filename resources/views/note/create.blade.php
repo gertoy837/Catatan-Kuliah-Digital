@@ -18,24 +18,34 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header pb-0">
                         <h4>Buat Catatan Baru</h4>
                         <span>Buat catatan baru di dalam topik: <strong>{{ $topic->name }}</strong> (Mata Kuliah:
                             {{ $topic->subject->name }})</span>
                     </div>
                     <div class="card-body">
                         {{-- Form tidak lagi memerlukan enctype="multipart/form-data" --}}
-                        <form action="{{ route('catatan.store', $topic) }}" method="POST" class="theme-form" enctype="multipart/form-data">
+                        <form action="{{ route('catatan.store', $topic) }}" method="POST" class="theme-form"
+                            enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="topic_id" value="{{ $topic->id }}">
 
-                            {{-- Input untuk Judul Catatan --}}
                             <div class="mb-3">
                                 <label class="col-form-label pt-0" for="title">Judul Catatan</label>
                                 <input class="form-control @error('title') is-invalid @enderror" id="title"
                                     type="text" name="title" placeholder="Masukkan judul catatan"
                                     value="{{ old('title') }}">
                                 @error('title')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="col-form-label pt-0" for="tags">Tags <br><small class="text-muted text-normal"><span class="text-danger">*</span> Pisahkan dengan koma</small></label>
+                                <input class="form-control @error('tags') is-invalid @enderror" id="tags"
+                                    type="text" name="tags" placeholder="Contoh: penting, rumus, ujian"
+                                    value="{{ old('tags') }}">
+                                @error('tags')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -61,18 +71,6 @@
                                 @enderror
                             </div>
 
-                            {{-- Input Tags --}}
-                            <div class="mb-3">
-                                <label class="col-form-label pt-0" for="tags">Tags (Pisahkan dengan koma)</label>
-                                <input class="form-control @error('tags') is-invalid @enderror" id="tags"
-                                    type="text" name="tags" placeholder="Contoh: penting, rumus, ujian"
-                                    value="{{ old('tags') }}">
-                                @error('tags')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
-                            {{-- Tombol Aksi --}}
                             <hr>
                             <div class="d-flex justify-content-end gap-2">
                                 <a href="{{ route('catatan.detail', [$topic->subject_id, $topic->id]) }}"

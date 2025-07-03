@@ -12,7 +12,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = auth()->user()->subjects()->latest()->paginate(10);
+        $subjects = Subject::latest()->paginate(10);
         return view('subjects.index', compact('subjects'));
     }
 
@@ -29,7 +29,6 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        // --- Validasi langsung di dalam controller ---
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -62,7 +61,6 @@ class SubjectController extends Controller
      */
     public function update(Request $request, Subject $subject)
     {
-        // --- Validasi langsung di dalam controller ---
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',

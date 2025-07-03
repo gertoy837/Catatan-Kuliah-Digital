@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Note;
 use Illuminate\Http\Request;
-use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -14,7 +14,7 @@ class CommentController extends Controller
         'body' => 'required|string|max:255',
     ]);
 
-    $note = \App\Models\Note::findOrFail($request->note_id);
+    $note = Note::findOrFail($request->note_id);
 
     $note->comments()->create([
         'user_id' => Auth::id(),

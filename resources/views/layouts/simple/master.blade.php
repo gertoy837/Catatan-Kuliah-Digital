@@ -18,8 +18,6 @@
         </div>
     </main>
     @include('layouts.simple.scripts')
-    {{-- @yield('script') --}}
-
 </body>
 
 </html>

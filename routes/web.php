@@ -34,14 +34,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
-
-    // // ==========================================================
-    // // ROUTE UNTUK NOTES (CATATAN)
-    // // ==========================================================
-    // // Rute untuk menampilkan form pembuatan catatan (dimulai dari halaman topik).
-    // Route::get('/topics/{topic}/notes/create', [NoteController::class, 'create'])->name('notes.create');
-    // // Rute untuk menyimpan catatan baru.
-    // Route::post('/topics/{topic}/notes', [NoteController::class, 'store'])->name('notes.store');
 });
 
 Route::post('/attachments', function (Request $request) {
