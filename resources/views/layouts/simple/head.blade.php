@@ -7,6 +7,8 @@
 <script src="https://kit.fontawesome.com/e2bb076cb4.js" crossorigin="anonymous"></script>
 <link id="pagestyle" href="{{ asset('assets') }}/css/soft-ui-dashboard.css?v=1.1.0" rel="stylesheet" />
 <x-rich-text::styles theme="richtextlaravel" data-turbo-track="false" />
+<link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
+
 @yield('head')
 <style>
     .pagination .page-link {

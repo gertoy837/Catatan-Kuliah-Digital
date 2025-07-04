@@ -11,9 +11,11 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">{{ $note->title }}</h4>
                             <div class="d-flex gap-2">
-                                <a href="{{ route('catatan.edit', $note) }}" class="btn btn-warning btn-sm">
-                                    <i class="fa fa-pencil"></i> Edit Catatan
-                                </a>
+                                @if (auth()->id() === $note->user_id)
+                                    <a href="{{ route('catatan.edit', $note) }}" class="btn btn-warning btn-sm">
+                                        <i class="fa fa-pencil"></i> Edit Catatan
+                                    </a>
+                                @endif
                                 <a href="{{ route('catatan.detail', [$note->topic->subject_id, $note->topic_id]) }}"
                                     class="btn btn-secondary btn-sm">
                                     <i class="fa fa-arrow-left"></i> Kembali ke Daftar
@@ -24,9 +26,9 @@
                             {{ $note->updated_at->diffForHumans() }}</small>
                         <br>
                         @foreach ($note->tags as $tag)
-                            <a href="{{ route('catatan.tag', $tag->name) }}" class="text-muted text-decoration-none">
+                            <span class="text-muted text-decoration-none">
                                 <small>#{{ $tag->name }}</small>
-                            </a>
+                            </span>
                         @endforeach
                     </div>
 

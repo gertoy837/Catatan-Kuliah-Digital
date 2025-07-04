@@ -58,8 +58,9 @@
                                         <a href="{{ route('catatan.show', $note) }}"
                                             class="text-decoration-none fs-6">{{ $note->title }}</a>
                                         <br>
-                                        <small class="text-muted">Diperbarui:
+                                        <small class="text-muted">Dibuat oleh: {{ $note->user->name }} | Diperbarui:
                                             {{ $note->updated_at->diffForHumans() }}</small>
+                                        <br>
                                         <div class="tags-container mt-1">
                                             @foreach ($note->tags as $tag)
                                                 <a href="{{ route('catatan.detail', [$subject, $topic, 'tag' => $tag->name]) }}"
@@ -72,14 +73,17 @@
                                     </div>
                                     <div class="d-flex gap-2">
                                         <a href="{{ route('catatan.show', $note) }}" class="btn btn-info btn-xs">Lihat</a>
-                                        <a href="{{ route('catatan.edit', $note) }}"
-                                            class="btn btn-warning btn-xs">Edit</a>
-                                        <form action="{{ route('catatan.destroy', $note) }}" method="POST"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-xs">Hapus</button>
-                                        </form>
+
+                                        @if (auth()->id() === $note->user_id)
+                                            <a href="{{ route('catatan.edit', $note) }}"
+                                                class="btn btn-warning btn-xs">Edit</a>
+                                            <form action="{{ route('catatan.destroy', $note) }}" method="POST"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-xs">Hapus</button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </li>
                             @empty

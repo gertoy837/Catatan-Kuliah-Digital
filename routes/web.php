@@ -11,9 +11,8 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
-    return redirect()->route('login');
-});
-
+    return view('landing');
+})->name('welcome');
 
 Route::middleware('auth')->group(function () {
     Route::get('/catatan', [DashboardController::class, 'index'])->name('dashboard');
