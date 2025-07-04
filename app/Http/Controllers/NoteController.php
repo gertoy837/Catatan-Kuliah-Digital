@@ -28,9 +28,6 @@ class NoteController extends Controller
         return view('note.index', compact('notes', 'tag'));
     }
 
-    /**
-     * Menampilkan form untuk membuat catatan baru di dalam topik tertentu.
-     */
     public function create(Request $request)
     {
         $topic = Topic::find($request->id);

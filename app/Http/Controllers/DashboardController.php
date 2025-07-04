@@ -7,10 +7,6 @@ use App\Models\Subject;
 
 class DashboardController extends Controller
 {
-    /**
-     * Menampilkan halaman utama (dashboard) dengan daftar mata kuliah.
-     * Sekarang mendukung fungsionalitas pencarian.
-     */
     public function index(Request $request)
     {
         $query = Subject::query();
@@ -23,7 +19,7 @@ class DashboardController extends Controller
         $subjects = $query->withCount(['topics', 'notes'])
                         ->latest()
                         ->paginate(9)
-                        ->withQueryString(); // Ini akan otomatis menambahkan parameter pencarian ke link pagination
+                        ->withQueryString();
 
         return view('dashboard', compact('subjects'));
     }

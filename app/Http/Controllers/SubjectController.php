@@ -7,9 +7,6 @@ use Illuminate\Http\Request; // Gunakan Request bawaan Laravel
 
 class SubjectController extends Controller
 {
-    /**
-     * Menampilkan daftar semua mata kuliah milik pengguna yang sedang login.
-     */
     public function index()
     {
         $subjects = Subject::latest()->paginate(10);
